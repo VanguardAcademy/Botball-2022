@@ -1,0 +1,153 @@
+#define RTMotor 0
+#define LFMotor 3
+#define FirstServo 0
+#define SecondServo 1
+#define ThirdServo 2
+#define ITTR 188 //Inch to Tick Ratio
+#define DTTR 12.67 // Degree to Tick Ratio
+
+void driveForward(int distance){
+    cmpc(RTMotor);
+    cmpc(LFMotor);
+    int distanceRemaining = distance * ITTR - (gmpc(RTMotor)+gmpc(LFMotor))/2; //Integer to show how far is left to go
+    //full speed ahead
+    while(750 <= distanceRemaining){ 
+        mav(RTMotor, distanceRemaining);
+        mav(LFMotor, distanceRemaining);
+        distanceRemaining = distance * ITTR - (gmpc(RTMotor)+gmpc(LFMotor))/2;
+        msleep(15);
+    }
+    //closer go slow
+    while(750 > distanceRemaining && distanceRemaining > 0){
+        mav(RTMotor, 650);
+        mav(LFMotor, 650);
+        distanceRemaining = distance * ITTR - (gmpc(RTMotor)+gmpc(LFMotor))/2;
+        msleep(15);
+    }
+    //stop
+    while(distanceRemaining <= 0){
+        mav(RTMotor, 0);
+        mav(LFMotor, 0);
+        distanceRemaining = distance * ITTR - (gmpc(RTMotor)+gmpc(LFMotor))/2; //update variable
+        msleep(15);
+        return;
+    }
+}
+
+void driveBackward(int distance){
+    cmpc(RTMotor);
+    cmpc(LFMotor);
+    int distanceRemaining = distance * ITTR - (gmpc(RTMotor)+gmpc(LFMotor))/-2;
+    while(distanceRemaining >= 750){
+        mav(RTMotor, -distanceRemaining);
+        mav(LFMotor, -distanceRemaining);
+        distanceRemaining = distance * ITTR - (gmpc(RTMotor)+gmpc(LFMotor))/-2;
+        msleep(15);
+    }
+    while(750 > distanceRemaining && distanceRemaining > 0){
+        mav(RTMotor, -650);
+        mav(LFMotor, -650);
+        distanceRemaining = distance * ITTR - (gmpc(RTMotor)+gmpc(LFMotor))/-2;
+        msleep(15);
+    }
+    if(distanceRemaining <= 0){
+        mav(RTMotor, -0);
+        mav(LFMotor, -0);
+        msleep(15);
+        return;
+    }
+}
+
+void turnRight(int degrees){
+    cmpc(RTMotor);
+    cmpc(LFMotor);
+    float turnRadius = degrees * DTTR - (gmpc(LFMotor)-gmpc(RTMotor))/2; 
+    while(turnRadius >= 100){
+    	mav(RTMotor, -1200);
+        mav(LFMotor, 1200);
+        turnRadius = degrees * DTTR - (gmpc(LFMotor)-gmpc(RTMotor))/2; 
+        msleep(15);
+    }
+    while(turnRadius < 100 && turnRadius > 0){
+        mav(RTMotor, -500);
+        mav(LFMotor, 500); 
+        turnRadius = degrees * DTTR - (gmpc(LFMotor)-gmpc(RTMotor))/2; 
+        msleep(15);
+    }
+    if(turnRadius <= 0){
+        mav(RTMotor, 0);
+        mav(LFMotor, 0);
+        return;
+    }
+}
+    
+void turnLeft(int degrees){
+    cmpc(RTMotor);
+    cmpc(LFMotor);
+    float turnRadius = degrees * DTTR - (gmpc(RTMotor)-gmpc(LFMotor))/2;
+    while(turnRadius >= 100){
+    	mav(RTMotor, 1200);
+        mav(LFMotor, -1200);
+        turnRadius = degrees * DTTR - (gmpc(RTMotor)-gmpc(LFMotor))/2;
+        msleep(15);
+    }
+    while(turnRadius < 100 && turnRadius > 0){
+        mav(RTMotor, 500);
+        mav(LFMotor, -500);
+        turnRadius = degrees * DTTR - (gmpc(RTMotor)-gmpc(LFMotor))/2;
+        msleep(15);
+    }
+    if(turnRadius <= 0){
+        mav(RTMotor, 0);
+        mav(LFMotor, 0);
+        return;
+    }
+}
+
+void ground(){
+    set_servo_position(FirstServo,0);
+}
+
+void firstRing(){
+    set_servo_position(FirstServo, 2000); //All ring positions to be tweeked.  
+}
+
+void secondRing(){
+    set_servo_position(FirstServo, 2000); 
+}
+
+void thirdRing(){
+    set_servo_position(FirstServo, 2000); 
+}
+
+void fourthRing(){
+    set_servo_position(FirstServo, 2000); 
+}
+
+void fifthRing(){
+    set_servo_position(FirstServo, 2000); 
+}
+    
+void verical(){
+    set_servo_position(FirstServo, 2000); 
+}
+    
+void putRing(){
+    set_servo_position(FirstServo,2000);
+}
+
+void horizontalAllignment(){
+    set_servo_position(SecondServo, 0);
+}
+
+void verticalAllignment(){
+    set_servo_position(SecondServo, 2000);
+}
+
+void openClaw(){
+    set_servo_position(ThirdServo,0);
+}
+
+void closeClaw(){
+    set_servo_position(ThirdServo,2000);
+}
