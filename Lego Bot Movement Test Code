@@ -1,0 +1,20 @@
+#include <kipr/wombat.h>
+#include <DriveLibrary.h>
+
+int main()
+{
+    set_servo_position(0,1417);
+    msleep(1000);
+    set_servo_position(1,0);
+    msleep(1000);
+    set_servo_position(2,1576);
+    msleep(1000);
+    set_servo_position(0,353);
+    msleep(1000);
+    set_servo_position(1,777);
+    msleep(1000);
+    set_servo_position(2,792);
+    msleep(1000);
+    
+    return 0;
+}
