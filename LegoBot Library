@@ -109,7 +109,7 @@ void ground(){
 }
 
 void firstRing(){
-    set_servo_position(FirstServo, 2000); //All ring positions to be tweeked.  
+    set_servo_position(FirstServo, 0); 
 }
 
 void secondRing(){
@@ -144,10 +144,35 @@ void verticalAllignment(){
     set_servo_position(SecondServo, 2000);
 }
 
-void openClaw(){
-    set_servo_position(ThirdServo,0);
+void openClaw1(){
+    set_servo_position(ThirdServo,500);
 }
 
-void closeClaw(){
-    set_servo_position(ThirdServo,2000);
+void closeClaw1(){
+    set_servo_position(ThirdServo,1150);
+}
+
+void closeClaw2(){
+    set_servo_position(ThirdServo,990);
+}
+
+void closeClaw3(){
+    set_servo_position(ThirdServo,890);
+}
+
+void closeClaw4(){
+    set_servo_position(ThirdServo,900);
+}
+
+void closeClaw5(){
+    set_servo_position(ThirdServo,780);
+}
+
+void resetClaw(){
+    set_servo_position(0,1417);
+    msleep(1000);
+    set_servo_position(1,0);
+    msleep(1000);
+    set_servo_position(2,1576);
+    msleep(1000);
 }
