@@ -1,0 +1,137 @@
+#include <kipr/wombat.h>
+
+void df(int distance); // drive forward
+void db(int distance); // drive backward
+void tr(int angle); // turn right
+void tl(int angle); // turn left
+void tr180(); // turn right 180
+void tl180(); // turn left 180
+void tr360(); // turn right 360
+void tl360(); // turn left 360
+void ccdc(); // clear create distance counter
+void ccac(); // clear create angle counter
+void launchLasso(); // throw out lasso to grab botguy
+void sleep();
+void resetLasso(); // reset the lasso arm 
+
+
+int main()
+{
+    create_connect();
+    wait_for_light(0);
+    shut_down_in(119);
+    df(-20);
+    tr(180);
+    db(2);
+    tl(85);
+    df(-38);
+    tr(85);
+    db(2);
+    launchLasso();
+    df(-3);
+    resetLasso();
+    tl(85);
+    df(-38);
+    tr(85);
+    df(-5);
+    tr(85);
+    df(-50);
+    tr(30);
+	df(-4);
+    create_disconnect();
+    return 0;
+}
+
+void df(int distance) { // in millimeters
+    ccdc(); // clear create distance counter
+    int distanceA = distance * 25.4; // distance converter from millimeter to inches
+    while(get_create_distance() > distanceA) { // if the distance read is less than the inputed distance, drive forward
+        
+        create_drive_direct(-200,-200);
+    }
+    create_stop();
+}
+
+void db(int distance) { // in millimeters
+    ccdc(); // clear create distance counter
+    int distanceA = distance * 25.4; // distance converter from millimeter to inches
+    while(get_create_distance() < distanceA) { // if the distance read is greater than the inputed distance, drive backward.
+    	create_drive_direct(200,200);
+    }
+    create_stop();
+}
+
+void tr(int angle) {
+    ccac(); // clear create angle counter
+    int AngleA = angle + 5; // adding to angle inputed for slight inacuracies
+    int createAngle = 0; 
+    while(get_create_total_angle() > -AngleA) { // if the angle read is greater than the negative inputed angle, turn right
+        create_drive_direct(100,-100);
+        createAngle = get_create_total_angle();
+        printf("%i\n",createAngle); // used for troubleshooting
+        msleep(30);
+    }
+    create_stop();
+}
+void tl(int angle) {
+    ccac(); // clear create angle counter
+    int AngleA = angle + 5; // adding to angle inputed for slight inacuracies
+    int createAngle = 0;
+    while(get_create_total_angle() < AngleA) { // if the angle read is less than the inputed angle, turn left
+        create_drive_direct(-100,100);
+        createAngle = get_create_total_angle();
+        printf("%i\n",createAngle); // used for troubleshooting
+        msleep(30);
+    }
+    create_stop();
+}
+
+void tr180() { // turn right 90
+    ccac(); // clear create angle counter
+    tr(90);
+    msleep(100);
+    tr(90);
+    msleep(100);
+}
+
+void tl180() { // turn left 180
+    ccac(); // clear create angle counter
+    tl(90);
+    msleep(100);
+    tl(90);
+    msleep(100);
+}
+
+void tr360() { // turn right 360
+    ccac(); // clear create angle counter
+	tr180();
+    tr180();
+}
+
+void tl360() { // turn left 360
+    ccac(); // clear create angle counter
+	tl360();
+    tl360();
+}
+
+void ccac() { // set create angle to zero
+    set_create_total_angle(0);
+}
+
+void ccdc() { // set create distance to zero
+	set_create_distance(0);
+}
+
+void sleep() { // consistent sleep function 
+    msleep(1000);
+}
+
+void launchLasso() { // throw out lasso 
+    motor(0,-75);
+    sleep();
+}
+
+void resetLasso() { // the lasso arm
+    motor(0,75);
+    sleep();
+}
